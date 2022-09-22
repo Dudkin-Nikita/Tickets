@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public enum TicketType
+    public enum TicketTypes
     {
         Classic,
         Party,
