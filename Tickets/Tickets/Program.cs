@@ -1,8 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using Tickets.Domain.Repositories;
+using Tickets.Domain.Repositories.Abstract;
+using Tickets.Domain.Repositories.EntityFramework;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddTransient<IClassicTicketsRepository, EFClassicTicketsRepository>();
+builder.Services.AddTransient<IOpenAirTicketsRepository, EFOpenAirTicketsRepository>();
+builder.Services.AddTransient<IPartyTicketsRepository, EFPartyTicketsRepository>();
+builder.Services.AddTransient<DataManager>();
 
 var app = builder.Build();
 
