@@ -1,12 +1,12 @@
 ﻿import React from 'react';
 import BaseTicketItem from './BaseTicketItem';
 
-const TicketList = ({tickets}) => {
+const TicketList = ({tickets, title, remove}) => {
     return (
         <div>
-            <h1>List of tickets</h1>
-            {tickets.map(ticket =>
-                <BaseTicketItem ticket={ticket} key={ticket.id} />
+            <h1>{title}</h1>
+            {tickets.map((ticket, index) =>
+                <BaseTicketItem remove={remove} number={index + 1} ticket={ticket} key={ticket.id} />
             )}
         </div>
     )
