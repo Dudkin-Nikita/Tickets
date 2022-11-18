@@ -1,9 +1,8 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useMemo, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import TicketFilter from './components/TicketFilter';
 import TicketForm from './components/TicketForm';
 import TicketList from './components/TicketList';
-import MyInput from './components/UI/input/MyInput';
-import MySelect from './components/UI/select/MySelect';
 import './styles/App.css'
 
 function App() {
@@ -15,13 +14,11 @@ function App() {
 
     const [sortedTickets, setSortedTickets] = useState(tickets)
 
-    const [selectedSort, setSelectedSort] = useState('')
-    const [searchQuery, setSearchQuery] = useState('')
-
+    const [filter, setFilter] = useState({sort: '', query: ''})
 
     const createTicket = (newTicket) => {
         setTickets([...tickets, newTicket])
-        if (newTicket.body === selectedSort) {
+        if (newTicket.body === filter.sort) {
             setSortedTickets([...sortedTickets, newTicket])
         }
     }
@@ -32,7 +29,7 @@ function App() {
     }
 
     const sortTickets = (sort) => {
-        setSelectedSort(sort)
+        setFilter({ ...filter, sort: sort })
         if (sort !== "All") {
             setSortedTickets([...tickets].filter(t => t.body === sort))
         } else {
@@ -40,32 +37,16 @@ function App() {
         } 
     }
 
+    const sortedAndSearchedTickets = useMemo(() => {
+        return sortedTickets.filter(ticket => ticket.title.toLowerCase().includes(filter.query.toLowerCase()))
+    }, [filter.query, sortedTickets])
+
     return (
         <div className="App">
             <TicketForm create={createTicket} />
-            <hr/>
-            <div>
-                <MyInput
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search"
-                />
-                <MySelect
-                    value={selectedSort}
-                    onChange={sortTickets}
-                    defaultValue='Sort'
-                    options={[
-                        { value: "All", name: "All" },
-                        { value: "Classic", name: "Classic" },
-                        { value: "Party", name: "Party" },
-                        { value: "OpenAir", name: "OpenAir" }
-                    ]}
-                />
-            </div>
-            {sortedTickets.length
-                ? <TicketList remove={removeTicket} tickets={sortedTickets} title="List of tickets" />
-                : <h1>There is no tickets</h1>
-            } 
+            <hr />
+            <TicketFilter filter={filter} setFilter={setFilter} sortTickets={sortTickets} />
+            <TicketList remove={removeTicket} tickets={sortedAndSearchedTickets} title="List of tickets" />
         </div>
     )
 }

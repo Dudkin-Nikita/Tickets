@@ -1,7 +1,12 @@
 ﻿import React from 'react';
 import BaseTicketItem from './BaseTicketItem';
 
-const TicketList = ({tickets, title, remove}) => {
+const TicketList = ({ tickets, title, remove }) => {
+    if (!tickets.length) {
+        return (
+            <h1>There is no tickets</h1>
+        )
+    }
     return (
         <div>
             <h1>{title}</h1>
