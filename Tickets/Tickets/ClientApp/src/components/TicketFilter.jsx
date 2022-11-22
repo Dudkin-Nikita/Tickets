@@ -12,7 +12,7 @@ const TicketFilter = ({ filter, setFilter, sortTickets }) => {
             />
             <MySelect
                 value={filter.sort}
-                onChange={sortTickets}
+                onChange={selectedFilter => setFilter({ ...filter, sort: selectedFilter })}
                 defaultValue='Sort'
                 options={[
                     { value: "All", name: "All" },

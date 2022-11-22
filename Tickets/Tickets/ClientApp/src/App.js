@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import TicketFilter from './components/TicketFilter';
 import TicketForm from './components/TicketForm';
 import TicketList from './components/TicketList';
+import MyButton from './components/UI/button/MyButton';
+import MyModal from './components/UI/modal/MyModal';
 import './styles/App.css'
 
 function App() {
@@ -12,30 +14,24 @@ function App() {
         { id: 3, title: "Ticket 3", body: "OpenAir"}
     ])
 
-    const [sortedTickets, setSortedTickets] = useState(tickets)
-
-    const [filter, setFilter] = useState({sort: '', query: ''})
+    const [filter, setFilter] = useState({ sort: 'All', query: '' })
+    const [modal, setModal] = useState(false)
 
     const createTicket = (newTicket) => {
         setTickets([...tickets, newTicket])
-        if (newTicket.body === filter.sort) {
-            setSortedTickets([...sortedTickets, newTicket])
-        }
+        setModal(false)
     }
 
     const removeTicket = (ticket) => {
         setTickets(tickets.filter(t => t.id !== ticket.id))
-        setSortedTickets(sortedTickets.filter(t => t.id !== ticket.id))
     }
 
-    const sortTickets = (sort) => {
-        setFilter({ ...filter, sort: sort })
-        if (sort !== "All") {
-            setSortedTickets([...tickets].filter(t => t.body === sort))
-        } else {
-            setSortedTickets(tickets)
+    const sortedTickets = useMemo(() => {
+        if (filter.sort !== 'All') {
+            return ([...tickets].filter(t => t.body === filter.sort))
         } 
-    }
+        return tickets
+    }, [filter.sort, tickets])
 
     const sortedAndSearchedTickets = useMemo(() => {
         return sortedTickets.filter(ticket => ticket.title.toLowerCase().includes(filter.query.toLowerCase()))
@@ -43,9 +39,12 @@ function App() {
 
     return (
         <div className="App">
-            <TicketForm create={createTicket} />
+            <MyButton onClick={() => setModal(true)}>Create ticket</MyButton>
+            <MyModal visible={modal} setVisible={setModal}>
+                <TicketForm create={createTicket} />
+            </MyModal>
             <hr />
-            <TicketFilter filter={filter} setFilter={setFilter} sortTickets={sortTickets} />
+            <TicketFilter filter={filter} setFilter={setFilter} />
             <TicketList remove={removeTicket} tickets={sortedAndSearchedTickets} title="List of tickets" />
         </div>
     )
