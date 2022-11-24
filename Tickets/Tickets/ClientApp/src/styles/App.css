@@ -22,6 +22,24 @@
     align-items: center;
 }
 
+.ticket-enter {
+    transform: translateX(-350px);
+}
+
+.ticket-enter-active {
+    transform: translateX(0px);
+    transition: all 500ms ease-in;
+}
+
+.ticket-exit {
+    opacity: 1;
+}
+
+.ticket-exit-active {
+    transform: translateX(-350px);
+    transition: all 500ms ease-in;
+}
+
 h1 {
     text-align: center;
 }

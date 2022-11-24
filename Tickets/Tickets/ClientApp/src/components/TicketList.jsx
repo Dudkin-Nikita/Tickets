@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import BaseTicketItem from './BaseTicketItem';
+import {TransitionGroup, CSSTransition } from 'react-transition-group'
 
 const TicketList = ({ tickets, title, remove }) => {
     if (!tickets.length) {
@@ -10,9 +11,17 @@ const TicketList = ({ tickets, title, remove }) => {
     return (
         <div>
             <h1>{title}</h1>
-            {tickets.map((ticket, index) =>
-                <BaseTicketItem remove={remove} number={index + 1} ticket={ticket} key={ticket.id} />
-            )}
+            <TransitionGroup>
+                {tickets.map((ticket, index) =>
+                    <CSSTransition
+                        key={ticket.id}
+                        timeout={500}
+                        classNames='ticket'
+                    >
+                        <BaseTicketItem remove={remove} number={index + 1} ticket={ticket} />
+                    </CSSTransition> 
+                )}
+            </TransitionGroup> 
         </div>
     )
 }
