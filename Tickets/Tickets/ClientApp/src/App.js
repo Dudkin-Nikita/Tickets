@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import TicketService from './API/TicketService';
 import { useTickets } from './components/hooks/useTickets';
 import TicketFilter from './components/TicketFilter';
 import TicketForm from './components/TicketForm';
@@ -10,13 +11,19 @@ import './styles/App.css'
 
 function App() {
     const [tickets, setTickets] = useState([
-        { id: 1, title: "Ticket", body: "Party" },
-        { id: 2, title: "Ticket 2", body: "Classic" },
-        { id: 3, title: "Ticket 3", body: "OpenAir"}
+        //{ id: 1, title: "Ticket", body: "Party" },
+        //{ id: 2, title: "Ticket 2", body: "Classic" },
+        //{ id: 3, title: "Ticket 3", body: "OpenAir"}
     ])
 
     const [filter, setFilter] = useState({ sort: 'All', query: '' })
     const [modal, setModal] = useState(false)
+
+    useEffect(() => {
+        fetchTickets()
+    }, [])
+
+
     const sortedAndSearchedTickets = useTickets(tickets, filter.sort, filter.query)
 
     const createTicket = (newTicket) => {
@@ -26,6 +33,11 @@ function App() {
 
     const removeTicket = (ticket) => {
         setTickets(tickets.filter(t => t.id !== ticket.id))
+    }
+
+    async function fetchTickets() {
+        const tickets = await TicketService.getAll()
+        setTickets(tickets)
     }
 
     return (
