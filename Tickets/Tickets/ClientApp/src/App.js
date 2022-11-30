@@ -6,6 +6,7 @@ import TicketFilter from './components/TicketFilter';
 import TicketForm from './components/TicketForm';
 import TicketList from './components/TicketList';
 import MyButton from './components/UI/button/MyButton';
+import Loader from './components/UI/loader/Loader';
 import MyModal from './components/UI/modal/MyModal';
 import './styles/App.css'
 
@@ -18,6 +19,7 @@ function App() {
 
     const [filter, setFilter] = useState({ sort: 'All', query: '' })
     const [modal, setModal] = useState(false)
+    const [isTicketsLoading, setIsTicketsLoading] = useState(false)
 
     useEffect(() => {
         fetchTickets()
@@ -36,8 +38,10 @@ function App() {
     }
 
     async function fetchTickets() {
+        setIsTicketsLoading(true)
         const tickets = await TicketService.getAll()
         setTickets(tickets)
+        setIsTicketsLoading(false)
     }
 
     return (
@@ -48,7 +52,10 @@ function App() {
             </MyModal>
             <hr />
             <TicketFilter filter={filter} setFilter={setFilter} />
-            <TicketList remove={removeTicket} tickets={sortedAndSearchedTickets} title="List of tickets" />
+            {isTicketsLoading
+                ? <div className="loader"><Loader /></div>
+                : <TicketList remove={removeTicket} tickets={sortedAndSearchedTickets} title="List of tickets" />
+            }           
         </div>
     )
 }

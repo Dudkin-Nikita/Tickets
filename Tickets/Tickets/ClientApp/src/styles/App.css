@@ -47,3 +47,9 @@ h1 {
 hr {
     margin: 15px 0;
 }
+
+.loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
