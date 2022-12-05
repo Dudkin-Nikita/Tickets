@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import TicketService from './API/TicketService';
+import { useFetching } from './components/hooks/useFetching';
 import { useTickets } from './components/hooks/useTickets';
 import TicketFilter from './components/TicketFilter';
 import TicketForm from './components/TicketForm';
@@ -19,7 +20,10 @@ function App() {
 
     const [filter, setFilter] = useState({ sort: 'All', query: '' })
     const [modal, setModal] = useState(false)
-    const [isTicketsLoading, setIsTicketsLoading] = useState(false)
+    const [fetchTickets, isTicketsLoading, ticketError] = useFetching(async () => {
+        const tickets = await TicketService.getAll()
+        setTickets(tickets)
+    })
 
     useEffect(() => {
         fetchTickets()
@@ -37,13 +41,6 @@ function App() {
         setTickets(tickets.filter(t => t.id !== ticket.id))
     }
 
-    async function fetchTickets() {
-        setIsTicketsLoading(true)
-        const tickets = await TicketService.getAll()
-        setTickets(tickets)
-        setIsTicketsLoading(false)
-    }
-
     return (
         <div className="App">
             <MyButton onClick={() => setModal(true)}>Create ticket</MyButton>
@@ -52,6 +49,9 @@ function App() {
             </MyModal>
             <hr />
             <TicketFilter filter={filter} setFilter={setFilter} />
+            {ticketError &&
+                <h1>{ticketError}</h1>
+            }
             {isTicketsLoading
                 ? <div className="loader"><Loader /></div>
                 : <TicketList remove={removeTicket} tickets={sortedAndSearchedTickets} title="List of tickets" />
