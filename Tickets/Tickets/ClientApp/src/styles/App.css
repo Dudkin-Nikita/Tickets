@@ -6,11 +6,14 @@
 
 #root {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .App {
     width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .ticket {
@@ -52,4 +55,17 @@ hr {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+}
+
+.navbar {
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    background: lightsalmon;
+}
+
+.navbar__links {
+    margin-left: auto;
 }
