@@ -22,7 +22,7 @@ function Tickets() {
     const [modal, setModal] = useState(false)
     const [fetchTickets, isTicketsLoading, ticketError] = useFetching(async () => {
         const tickets = await TicketService.getAll()
-        setTickets(tickets)
+        setTickets(tickets.data)
     })
 
     useEffect(() => {

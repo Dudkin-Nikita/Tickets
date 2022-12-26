@@ -3,6 +3,12 @@
 export default class TicketService {
     static async getAll() {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-        return response.data
+        //const response = await axios.get('https://localhost:7092/Tickets/Index')
+        return response
+    }
+
+    static async getById(id) {
+        const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
+        return response
     }
 }
