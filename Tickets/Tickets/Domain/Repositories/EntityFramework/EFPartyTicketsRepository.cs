@@ -4,34 +4,34 @@ using Tickets.Domain.Repositories.Abstract;
 
 namespace Tickets.Domain.Repositories.EntityFramework
 {
-    public class EFPartyTicketsRepository : IPartyTicketsRepository
+    public class EFPartyTicketsRepository : IRepository<PartyTicket>
     {
         private readonly AppDbContext context;
         public EFPartyTicketsRepository(AppDbContext context)
         {
             this.context = context;
         }
-        public IQueryable<PartyTicket> GetPartyTickets()
+        public IQueryable<PartyTicket> GetTickets()
         {
             return context.PartyTickets;
         }
-        public PartyTicket GetPartyTicketById(int id)
+        public PartyTicket? GetTicketById(int id)
         {
             return context.PartyTickets.FirstOrDefault(x => x.Id == id);
         }
-        public void AddPartyTicket(PartyTicket entity)
+        public void AddTicket(PartyTicket entity)
         {
             context.PartyTickets.Add(entity);
             context.SaveChanges();
         }
-        public void UpdatePartyTicket(PartyTicket entity)
+        public void UpdateTicket(PartyTicket entity)
         {
             context.Entry(entity).State = EntityState.Modified;
             context.SaveChanges();
         }
-        public void DeletePartyTicket(int id)
+        public void DeleteTicket(int id)
         {
-            PartyTicket ticket = context.PartyTickets.FirstOrDefault(x => x.Id == id);
+            PartyTicket? ticket = context.PartyTickets.FirstOrDefault(x => x.Id == id);
             if (ticket != null)
             {
                 context.PartyTickets.Remove(ticket);

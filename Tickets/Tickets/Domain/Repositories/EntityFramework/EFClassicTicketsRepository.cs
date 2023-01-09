@@ -4,32 +4,32 @@ using Tickets.Domain.Repositories.Abstract;
 
 namespace Tickets.Domain.Repositories.EntityFramework
 {
-    public class EFClassicTicketsRepository : IClassicTicketsRepository
+    public class EFClassicTicketsRepository : IRepository<ClassicTicket>
     {
         private readonly AppDbContext context;
         public EFClassicTicketsRepository(AppDbContext context)
         {
             this.context = context;
         }
-        public IQueryable<ClassicTicket> GetClassicTickets()
+        public IQueryable<ClassicTicket> GetTickets()
         {
             return context.ClassicTickets;
         }
-        public ClassicTicket GetClassicTicketById(int id)
+        public ClassicTicket? GetTicketById(int id)
         {
             return context.ClassicTickets.FirstOrDefault(x => x.Id == id);
         }
-        public void AddClassicTicket(ClassicTicket entity)
+        public void AddTicket(ClassicTicket entity)
         {
             context.ClassicTickets.Add(entity);
             context.SaveChanges();
         }
-        public void UpdateClassicTicket(ClassicTicket entity)
+        public void UpdateTicket(ClassicTicket entity)
         {
             context.Entry(entity).State = EntityState.Modified;
             context.SaveChanges();
         }
-        public void DeleteClassicTicket(int id)
+        public void DeleteTicket(int id)
         {
             ClassicTicket ticket = context.ClassicTickets.FirstOrDefault(x => x.Id == id);
             if (ticket != null)
